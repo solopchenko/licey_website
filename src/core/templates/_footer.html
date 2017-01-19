@@ -1,0 +1,39 @@
+<div class="section section_footer">
+    <div class="container">
+        {% for chunk in footer_menu %}
+        <div class="row">
+            {% for m in chunk %}
+                {% if m.links.count > 0 %}
+                <div class="row__col row__col_size_one-third">
+                    <ul class="footer-nav">
+                        <li class="footer-nav__title">
+                            {% if m.href %}
+                            <a class="link link_black" href="{{ m.href }}">{{ m.name }}</a>
+                            {% else %}
+                            {{ m.name }}
+                            {% endif %}
+                        </li>
+                        {% for link in m.links %}
+                        <li><a class="link link_blue" href="{{ link.href }}">{{ link.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <div class="row">
+            <div class="row__col row__col_size_two-thirds row__col_offset_one-third">
+                <div class="copyright">
+                    <div class="copyright__title">&copy; {{ organisation.full_name }} {% now "Y" %}</div>
+                    <div class="copyright__rights">При полном или частичном использовании материалов сайта ссылка обязательна.</div>
+                    <div class="copyright__madeby">Сделал <a class="link link_gray" href="http://solopchenko.net" target="_blank">Святослав Солопченко</a> в 2016 году.</div>
+                </div>
+                <div class="footer__to-top">
+                    <a id="up" class="link link_lightgray link_dashed" href="#">К началу&nbsp;&uarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

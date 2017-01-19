@@ -1,0 +1,53 @@
+{% extends '_base.html' %}
+
+{% block title %} {{ page.title }} {% endblock title %}
+
+{% block navtitle %}
+
+    {% for parent_page in page.parent_pages reversed %}
+        → <a class="breadcrumbs__item link link_blue" href="/{{ parent_page.url }}">{{ parent_page.title }}</a>
+    {% endfor %}
+    → <h1 class="breadcrumbs__item breadcrumbs__item_current">{{ page.title }}</h1>
+
+{% endblock navtitle %}
+
+{% block content %}
+
+    {% if page.slider %}
+    <div class="section section_slider">
+        <div class="container container_full">
+            <div class="fotorama" data-loop="true" data-transitionduration="750" data-click="false" data-swipe="true" data-maxwidth="100%" data-width="100%" data-height="400px">
+                {% for slide in page.slider %}
+                <div class="fotorama__item" style="background-image: url('{{ slide.background_image.url }}')">
+                    <div class="fotorama__content">
+                        <h2 class="title title_xl fotorama__select"><a class="link link_blue" href="{{ slide.link }}">{{ slide.title }}</a></h2>
+                        <h5 class="title title_s fotorama__select">{{ slide.subtitle }}</h5>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% for section in page.sections %}
+    <div class="section">
+        <div class="container {% if section.full_width %} container_full {% endif %}">
+            {% if section.title %}
+            <h2 class="title title_xl">{{ section.title }}</h2>
+            {% endif %}
+            {% autoescape off %} {{ section.content }} {% endautoescape %}
+
+            <ol class="list list_numbers">
+                {% for document in section.documents.all %}
+                    {% if document.file %}
+                    <li><a class="link link_blue" href="{{ document.file.url }}">{{ document.title }}</a></li>
+                    {% else %}
+                    <li><a class="link link_blue" href="{{ document.link }}">{{ document.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock content %}

@@ -1,0 +1,49 @@
+{% extends '_base.html' %}
+
+{% block title %} {{ news.title }} {% endblock title %}
+
+{% block navtitle %} → <a href="/news" class="breadcrumbs__item link link_blue">Новости и объявления</a> → <span class="breadcrumbs__item breadcrumbs__item_current">{{ news.title }}</span> {% endblock navtitle %}
+
+{% block content %}
+            <div class="section article">
+            <div class="container">
+                <div class="row">
+                    <div class="row__col row__col_size_twelve">
+                        <h2 class="article__title title title_xl">{{ news.title }}</h2>
+                        <div class="article__date text_gray">{{ news.published_at }}</div>
+
+                        {% if news.gallery %}
+                        <div class="article__gallery">
+                            <div class="fotorama fotorama_gallery" data-maxheight="600" data-ratio="4/3" data-fit="cover" data-loop="true">
+                                {% for i in news.gallery %}
+                                {% if i.file %}
+                                <img src="{{ i.file.url }}" data-caption="{{ i.description }}"/>
+                                {% else %}
+                                <img src="{{ i.href }}" data-caption="{{ i.description }}"/>
+                                {% endif %}
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="article__announcement">
+                            <p class="text">{{ news.announcement|striptags }}</p>
+                        </div>
+
+                        <div class="article__content">
+                            {% autoescape off %} {{ news.content }} {% endautoescape %}
+                        </div>
+
+                        <div class="article__social-buttons likely">
+                            <div class="vkontakte">Рассказать</div>
+                            <div class="odnoklassniki">Класс</div>
+                            <div class="facebook">Поделиться</div>
+                            <div class="twitter">Твитнуть</div>
+                            <div class="telegram">Отправить</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock content %}

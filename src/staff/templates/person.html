@@ -1,0 +1,51 @@
+{% extends '_base.html' %}
+
+{% block navtitle %} → <a href="/staff" class="breadcrumbs__item link link_blue">Сотрудники</a> → <h1 class="breadcrumbs__item breadcrumbs__item_current">{{ person.full_name }}</h1> {% endblock navtitle %}
+
+{% block content %}
+<div class="section staff-bio">
+            <div class="container">
+                <h2 class="title title_xl">{{ person.full_name }}</h2>
+
+                <div class="row">
+                    <div class="row__col row__col_size_one-third">
+                        <img src="http://placehold.it/260x240">
+                    </div>
+
+                    <div class="row__col row__col_size_two-thirds">
+                        {% if person.positions %}
+                        <div class="field">
+                            <div class="field__label">Должность</div>
+                            {% for position in person.positions.all %}
+                            <div>{{ position.name }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="field">
+                            <div class="field__label">Контакты</div>
+                            <div>{{ person.office }}</div>
+                            <div>{{ person.phone }}</div>
+                            <div><a class="link link_blue" href="mailto:{{ person.email }}">{{ person.email }}</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section staff-tabs">
+            <div class="container">
+                <ul class="tab-menu">
+                    {% for tab in person.tabs %}
+                    <li class="tab-menu__item"><a class="tab-menu__text" href="#{{ tab.id }}">{{ tab.name }}</a></li>
+                    {% endfor %}
+                </ul>
+
+                {% for tab in person.tabs %}
+                <div id="{{ tab.id }}" class="tab-item">
+                    {% autoescape off %} {{ tab.content }} {% endautoescape %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock content %}

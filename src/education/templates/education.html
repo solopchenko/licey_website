@@ -1,0 +1,42 @@
+{% extends '_base.html' %}
+
+{% block title %} {{ edupage.title }} {% endblock title %}
+
+{% block navtitle %} → <h1 class="breadcrumbs__item breadcrumbs__item_current">{{ edupage.title }}</h1> {% endblock navtitle %}
+
+{% block content %}
+        {% if edu_levels.count > 0 %}
+        <div class="section section_programs" id="programs">
+            <div class="container">
+                <h2 class="title title_xl">Образовательные программы</h2>
+                <div class="row">
+                    {% for edu_level in edu_levels %}
+                    <div class="row__col row__col_size_one-third">
+                        <div class="edu-level">
+                            <div class=" edu-level__title">{{ edu_level.name }}</div>
+                            <div class="edu-level__duration">{{ edu_level.description }}</div>
+                        </div>
+                        {% for program in edu_level.programs %}
+                        <a class="edu-program" href="/education/program/{{ program.slug }}">
+                            <div class="edu-program__title">{{ program.name }}</div>
+                            <div class="edu-program__description">{{ program.description }}</div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% for section in edupage.sections %}
+        <div class="section">
+            <div class="container">
+                <h2 class="title title_xl">{{ section.title }}</h2>
+                {% autoescape off %}
+                {{ section.content }}
+                {% endautoescape %}
+            </div>
+        </div>
+        {% endfor %}
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% extends '_base.html' %}
+
+{% block title %}Новости и объявления{% endblock title %}
+
+{% block navtitle %} → <h1 class="breadcrumbs__item breadcrumbs__item_current">Новости и объявления</h1> {% endblock navtitle %}
+
+{% block content %}
+        <div class="section">
+            <div class="container">
+                <h2 class="title title_xl">Новости и объявления</h2>
+                <div class="blackboard-list">
+                    {% for n in news %}
+                    <a class="blackboard-item" href="/news/{{ n.id }}">
+                        <div class="blackboard-item__title">{{ n.title }}</div>
+                        <div class="blackboard-item__date">{{ n.published_at }}</div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="container">
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if news.has_previous %}
+                            <a href="?page={{ news.previous_page_number }}">Новее</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Страница {{ news.number }} из {{ news.paginator.num_pages }}.
+                        </span>
+
+                        {% if news.has_next %}
+                            <a href="?page={{ news.next_page_number }}">Старее</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+{% endblock content %}

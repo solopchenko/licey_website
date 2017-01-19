@@ -1,0 +1,26 @@
+{% extends '_base.html' %}
+
+{% block navtitle %} → <a href="/staff" class="link link_blue">Сотрудники</a> → <h1 class="breadcrumbs__item breadcrumbs__item_current">{{ person.full_name }}</h1> {% endblock navtitle %}
+
+{% block content %}
+            <div class="container">
+                <ul class="tab-menu">
+                    <li class="tab-menu__item"><a class="tab-menu__text" href="#all">Все сотрудники</a></li>
+                    <li class="tab-menu__item"><a class="tab-menu__text" href="#head">Руководство</a></li>
+                    <li class="tab-menu__item"><a class="tab-menu__text" href="#teachers">Педогогический состав</a></li>
+                </ul>
+
+
+                <div id="all" class="tab-item">
+                    {% for person in staff %}
+                    {% autoescape off %} {{ tab.content }} {% endautoescape %}
+                    {% endfor %}
+                </div>
+                <div id="head" class="tab-item">
+                    {% autoescape off %} {{ tab.content }} {% endautoescape %}
+                </div>
+                <div id="teachers" class="tab-item">
+                    {% autoescape off %} {{ tab.content }} {% endautoescape %}
+                </div>
+            </div>
+{% endblock content %}

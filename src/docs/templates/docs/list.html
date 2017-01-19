@@ -1,0 +1,29 @@
+{% extends '_base.html' %}
+
+{% block title %} Документы {% endblock title %}
+
+{% block navtitle %} → <h1 class="breadcrumbs__item breadcrumbs__item_current">Документы</h1> {% endblock navtitle %}
+
+{% block content %}
+    {% for document_category in document_categories %}
+    {% if document_category.documents.count > 0 %}
+    <div class="section">
+        <div class="container">
+            <h2 class="title title_xl">{{ document_category.name }}</h2>
+            {% if document_category.description %}
+            <div>{{ document_category.description }}</div>
+            {% endif %}
+            <ol class="list list_numbers">
+                {% for document in document_category.documents %}
+                    {% if document.file %}
+                    <li><a class="link link_blue" href="{{ document.file.url }}">{{ document.title }}</a></li>
+                    {% else %}
+                    <li><a class="link link_blue" href="{{ document.link }}">{{ document.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+{% endblock content %}

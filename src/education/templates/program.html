@@ -1,0 +1,48 @@
+{% extends '_base.html' %}
+
+{% block title %} {{ program.name }} {% endblock title %}
+
+{% block navtitle %} → <a href="/education" class="breadcrumbs__item link link_blue">Образование</a> → <h1 class="breadcrumbs__item breadcrumbs__item_current">{{ program.name }}</h1> {% endblock navtitle %}
+
+{% block content %}
+        <div class="section section_programs" id="programs">
+            <div class="container">
+                <h2 class="title title_xl">{{ program.name }}</h2>
+                {% if program.full_description %}
+                    <p class="text_serif">{{ program.full_description }}</p>
+                    {% else %}
+                    <p class="text_serif">{{ program.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if program.courses.all %}
+        <div class="section section_programs">
+            <div class="container">
+                <h2 class="title title_xl">Дисциплины</h2>
+                <ol class="list list_circle">
+                    {% for course in program.courses.all %}
+                    <li class="spoiler">
+                        <a class="link link_blue link_dashed spoiler__text" href="">{{ course.name }}</a>
+                        <ul class="list list_circle spoiler__content">
+                        {% if course.course_program.file %}
+                            <li><a class="link link_blue" href="{{ course.course_program.file.url }}">{{ course.course_program.title }}</a></li>
+                        {% else %}
+                            <li><a class="link link_blue" href="{{ course.course_program.link }}">{{ course.course_program.title }}</a></li>
+                        {% endif %}
+
+                        {% for annotation in course.annotations.all %}
+                            {% if annotation.file %}
+                                <li><a class="link link_blue" href="{{ annotation.file.url }}">{{ annotation.title }}</a></li>
+                            {% else %}
+                                <li><a class="link link_blue" href="{{ annotation.link }}">{{ annotation.title }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+        {% endif %}
+{% endblock content %}

@@ -1,0 +1,62 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock title %}</title>
+    <meta name="description" content="{% block description %}{% endblock description %}">
+    <meta name="copyright" content="{{ organisation.name }}">
+    <!-- Open Graph
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta property="og:type" content="{% block ogtype %}{% endblock ogtype %}" />
+    <meta property="og:title" content="{% block ogtitle %}{% endblock ogtitle %}" />
+    <meta property="og:description" content="{% block ogdescription %}{% endblock ogdescription %}" />
+    <meta property="og:url" content="{% block ogurl %}{% endblock ogurl %}" />
+    <meta property="og:image" content="{% block ogimage %}{% endblock ogimage %}" />
+    <meta property="og:site_name" content="{% block ogsite_name %}{% endblock ogsite_name %}" />
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700&amp;subset=cyrillic" rel="stylesheet">
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="{% static 'assets/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/setka.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/likely.css' %}">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css">
+    <link rel="stylesheet" href="{% static 'assets/base.css' %}">
+</head>
+<body>
+    <div class="page">
+        <div class="section section_header">
+            <div class="container container_full">
+                <div class="breadcrumbs">
+                    <a class="breadcrumbs__item link link_blue" href="/">{{ organisation.name }}</a> {% block navtitle %}{% endblock navtitle %}
+                </div>
+            </div>
+        </div>
+
+        {% block content %}
+        {% endblock content %}
+
+        {% block footer %}
+        {% endblock footer %}
+
+        {% include '_footer.html' %}
+    </div>
+</body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> <!-- 33 KB -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> <!-- 16 KB -->
+<script src="{% static 'assets/likely.js' %}"></script>
+<script src="{% static 'assets/app.js' %}"></script>
+
+{% block scripts %}
+{% endblock scripts %}
+
+</html>

@@ -1,0 +1,237 @@
+{% extends '_base.html' %}
+
+{% block title %} {{ organisation.full_name }} {% endblock title %}
+
+{% block content %}
+    {% if main_menu %}
+    <div class="section section_menu">
+        <ul class="main-nav">
+            {% for m in main_menu %}
+            <li class="main-nav__item">
+                <a class="link link_blue" href="{{ m.href }}">{{ m.name }}</a>
+                {% if m.links %}
+
+                <ul class="list main-nav__sub">
+                    {% for link in m.links %}
+                    <li class="main-nav__subitem"><a class="link link_blue" href="{{ link.href }}">{{ link.title }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if page.slider %}
+    <div class="section section_slider">
+        <div class="container container_full">
+            <div class="fotorama" data-loop="true" data-transitionduration="750" data-click="false" data-swipe="true" data-maxwidth="100%" data-width="100%" data-height="400px">
+                {% for slide in page.slider %}
+                <div class="fotorama__item" style="background-image: url('{{ slide.background_image.url }}')">
+                    <div class="fotorama__content">
+                        <h2 class="title title_xl fotorama__select"><a class="link link_blue" href="{{ slide.link }}">{{ slide.title }}</a></h2>
+                        <h5 class="title title_s fotorama__select">{{ slide.subtitle }}</h5>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if news.count > 0 %}
+    <div class="section section_blackboard">
+        <div class="container">
+            <h2 class="title title_xl">Новости и объявления</h2>
+            <div class="row">
+                <div class="row__col row__col_size_one-half">
+                    <div class="blackboard-list">
+                        {% for item in news %}
+                        <a class="blackboard-item" href="/news/{{ item.id }}">
+                            <div class="blackboard-item__title">{{ item.title }}</div>
+                            <div class="blackboard-item__date">{{ item.published_at }}</div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if edu_levels.count > 0 %}
+    <div class="section section_programs">
+        <div class="container">
+            <h2 class="title title_xl">Образовательные программы</h2>
+            <div class="row">
+                {% for edu_level in edu_levels %}
+                <div class="row__col row__col_size_one-third">
+                    <div class="edu-level">
+                        <div class="edu-level__title">{{ edu_level.name }}</div>
+                        <div class="edu-level__duration">{{ edu_level.description }}</div>
+                    </div>
+                    {% for program in edu_level.programs %}
+                    <a class="edu-program" href="/education/program/{{ program.slug }}">
+                        <div class="edu-program__title">{{ program.name }}</div>
+                        <div class="edu-program__description">{{ program.description }}</div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+    {% if person_chunks|length > 0 %}
+    <div class="section section_staff">
+        <div class="container">
+            <h3 class="title title_xl">Сотрудники</h3>
+
+            {% for chunk in person_chunks|slice:":2" %}
+            <div class="row">
+                {% for person in chunk %}
+                <div class="row__col row__col_size_one-third">
+                    <a class="staff-item" href="/staff/{{ person.id }}">
+                        <div class="staff-item__name">{{ person.full_name }}</div>
+                        <div class="staff-item__position">
+                            {% for position in person.positions.all %}
+                            <div>{{ position.name }}.</div>
+                            {% endfor %}
+                        </div>
+                        <div class="staff-item__office">{{ person.office }}</div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            {% if person_chunks|length > 2 %}
+            <div class="staff-spoiler">
+                <div class="staff-spoiler__content">
+                    {% for chunk in person_chunks|slice:"2:" %}
+                    <div class="row">
+                        {% for person in chunk %}
+                        <div class="row__col row__col_size_one-third">
+                            <a class="staff-item" href="/staff/{{ person.id }}">
+                                <div class="staff-item__name">{{ person.full_name }}</div>
+                                <div class="staff-item__position">
+                                    {% for position in person.positions.all %}
+                                    <span>{{ position.name }}.</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="staff-item__office">{{ person.office }}</div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="staff-spoiler__button">
+                    <a class="button button-blue button-blue_outline">Показать всех сотрудников</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+        <div class="section section_contacts">
+            <div class="container">
+                <h3 class="title title_xl">Контакты</h3>
+                <div class="row">
+                    <div class="row__col row__col_size_twelve">
+                        <div class="field">
+                            <div class="field__label">Полное наименование</div>
+                            <div>{{ organisation.full_name }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row__col row__col_size_one-third">
+                        <div class="field">
+                            <div class="field__label">Директор</div>
+                            <div><a class="link link_blue" href="/staff/{{ organisation.director.id }}">{{ organisation.director.full_name }}</a></div>
+                        </div>
+                    </div>
+                    <div class="row__col row__col_size_one-third">
+                        <div class="field">
+                            <div class="field__label">Адрес электронной почты</div>
+                            <div><a class="link link_blue" href="mailto:{{ organisation.email }}">{{ organisation.email }}</a></div>
+                        </div>
+                    </div>
+                    <div class="row__col row__col_size_one-third">
+                        <div class="field">
+                            <div class="field__label">Сайт</div>
+                            <div><a class="link link_blue" href="{{ organisation.website }}">{{ organisation.website }}</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section map">
+            <div class="container container_full">
+                <div id="yandexmap"></div>
+            </div>
+        </div>
+        <div class="section address">
+            <div class="container">
+                <div class="row">
+                    {% for building in organisation.buildings %}
+                    <div class="row__col row__col_size_one-half">
+                        <div class="field">
+                            <div class="field__label">{{ building.name }}</div>
+                            <div>{{ building.address }}</div>
+                            <div>{{ building.business_hours }}</div>
+                            <div>{{ building.phone  }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script>
+    ymaps.ready(function () {
+        var myMap = new ymaps.Map('yandexmap', {
+            center: [53.825411, 91.323123],
+            zoom: 16,
+            // Обратите внимание, что в API 2.1 по умолчанию карта создается с элементами управления.
+            // Если вам не нужно их добавлять на карту, в ее параметрах передайте пустой массив в поле controls.
+            controls: []
+        });
+
+        var first_building = new ymaps.Placemark([53.826112, 91.322976], {
+            balloonContentBody: [
+                '<address>',
+                '<strong>Основное здание МБОУ "Лицей"</strong>',
+                '<br/>',
+                'Адрес: 655158, Республика Хакасия, г. Черногорск, пр. Космонавтов, д. 21а'
+            ].join('')
+        }, {
+            preset: 'islands#redDotIcon'
+        });
+        myMap.geoObjects.add(first_building);
+
+        var second_building = new ymaps.Placemark([53.823891, 91.324492], {
+            balloonContentBody: [
+                '<address>',
+                '<strong>Здание младшей школы МБОУ "Лицей"</strong>',
+                '<br/>',
+                'Адрес: 655158, Республика Хакасия, г. Черногорск, пр. Космонавтов, д. 17а'
+            ].join('')
+        }, {
+            preset: 'islands#redDotIcon'
+        });
+        myMap.geoObjects.add(second_building);
+
+        myMap.behaviors.disable('scrollZoom');
+    });
+</script>
+{% endblock scripts %}}

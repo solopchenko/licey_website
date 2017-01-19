@@ -1,0 +1,198 @@
+{% extends '_base.html' %}
+
+{% block title %} {{ page.title }} {% endblock title %}
+
+{% block navtitle %} → <h1 class="breadcrumbs__item breadcrumbs__item_current">{{ page.title }}</h1> {% endblock navtitle %}
+
+{% block content %}
+        <div class="section section_information">
+            <div class="container">
+                <h2 class="title title_xl">Основные сведения</h2>
+                <div class="row">
+                    <div class="row__col row__col_size_twelve">
+                        <div class="field">
+                            <div class="field__label">Полное наименование</div>
+                            <div>{{ organisation.full_name }}</div>
+                        </div>
+                        <div class="field">
+                            <div class="field__label">Дата ввода в эксплуатацию</div>
+                            <div>{{ organisation.foundation_date|date:'Y' }} год</div>
+                        </div>
+                        <div class="field">
+                            <div class="field__label">Дата государственной регистрации</div>
+                            <div>{{ organisation.registration_date }}</div>
+                        </div>
+                        {% if organisation.accreditation %}
+                        <div class="field">
+                            <div class="field__label">Акредитация</div>
+                            <div><a class="link link_blue" href="{{ organisation.accreditation.link }}">{{ organisation.accreditation.title }}</a></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row__col row__col_size_one-third">
+                        <div class="field">
+                            <div class="field__label">Директор</div>
+                            <div><a class="link link_blue" href="/staff/{{ organisation.director.id }}">{{ organisation.director.full_name }}</a></div>
+                        </div>
+                    </div>
+                    <div class="row__col row__col_size_one-third">
+                        <div class="field">
+                            <div class="field__label">Адрес электронной почты</div>
+                            <div><a class="link link_blue" href="mailto:{{ organisation.email }}">{{ organisation.email }}</a></div>
+                        </div>
+                    </div>
+                    <div class="row__col row__col_size_one-third">
+                        <div class="field">
+                            <div class="field__label">Сайт</div>
+                            <div><a class="link link_blue" href="{{ organisation.website }}">{{ organisation.website }}</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section_map">
+            <div class="container container_full">
+                <div id="yandexmap"></div>
+            </div>
+        </div>
+
+        <div class="section section_address">
+            <div class="container">
+                <div class="row">
+                    {% for building in organisation.buildings %}
+                    <div class="row__col row__col_size_one-half">
+                        <div class="field">
+                            <div class="field__label">{{ building.name }}</div>
+                            <div>{{ building.address }}</div>
+                            <div>{{ building.business_hours }}</div>
+                            <div>{{ building.phone  }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {% if organisation.founders.count > 0 %}
+        <div class="section">
+            <div class="container">
+                <h2 class="title title_xl">Учредители</h2>
+                {% for founder in organisation.founders %}
+                <h4 class="title title_m">{{ founder.name }}</h4>
+                <div class="row">
+                    <div class="row__col row__col_size_one-third">
+                        <div class="field">
+                            <div class="field__label">Руководитель</div>
+                            <div>{{ founder.head }}</div>
+                        </div>
+                    </div>
+                    <div class="row__col row__col_size_one-third">
+                        {% if founder.feedback %}
+                        <div class="field">
+                            <div class="field__label">Виртуальная приёмная</div>
+                            <div><a class="link link_blue" href="{{ founder.feedback }}">Написать обращение</a></div>
+                        </div>
+                        {% elif founder.email %}
+                        <div class="field">
+                            <div class="field__label">Адрес электронной почты</div>
+                            <div><a class="link link_blue" href="mailto:{{ founder.email }}">{{ founder.email }}</a></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="row__col row__col_size_one-third">
+                        <div class="field">
+                            <div class="field__label">Сайт</div>
+                            <div><a class="link link_blue" href="{{ founder.website }}">{{ founder.website }}</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row__col row__col_size_twelve">
+                        <div class="field">
+                            <div class="field__label">Адрес и телефон</div>
+                            <div>{{ founder.address }}</div>
+                            <div>{{ founder.phone }}</div>
+                        </div>
+                        <div class="field">
+                            <div class="field__label">Часы работы</div>
+                            <div>{{ founder.business_hours }}</div>
+                        </div>
+                        {% if founder.visiting_hours %}
+                        <div class="field">
+                            <div class="field__label">Часы приёма</div>
+                            <div>{{ founder.visiting_hours }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% for section in page.sections %}
+        <div class="section">
+            <div class="container">
+                <h2 class="title title_xl">{{ section.title }}</h2>
+                {% autoescape off %}
+                {{ section.content }}
+                {% endautoescape %}
+
+                <ol class="list list_numbers">
+                {% for document in section.documents.all %}
+                    {% if document.file %}
+                    <li><a class="link link_blue" href="{{ document.file.url }}">{{ document.title }}</a></li>
+                    {% else %}
+                    <li><a class="link link_blue" href="{{ document.link }}">{{ document.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                </ol>
+            </div>
+        </div>
+        {% endfor %}
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script>
+    ymaps.ready(function () {
+        var myMap = new ymaps.Map('yandexmap', {
+            center: [53.825411, 91.323123],
+            zoom: 16,
+            // Обратите внимание, что в API 2.1 по умолчанию карта создается с элементами управления.
+            // Если вам не нужно их добавлять на карту, в ее параметрах передайте пустой массив в поле controls.
+            controls: []
+        });
+
+        var first_building = new ymaps.Placemark([53.826112, 91.322976], {
+            balloonContentBody: [
+                '<address>',
+                '<strong>Основное здание МБОУ "Лицей"</strong>',
+                '<br/>',
+                'Адрес: 655158, Республика Хакасия, г. Черногорск, пр. Космонавтов, д. 21а'
+            ].join('')
+        }, {
+            preset: 'islands#redDotIcon'
+        });
+        myMap.geoObjects.add(first_building);
+
+        var second_building = new ymaps.Placemark([53.823891, 91.324492], {
+            balloonContentBody: [
+                '<address>',
+                '<strong>Здание младшей школы МБОУ "Лицей"</strong>',
+                '<br/>',
+                'Адрес: 655158, Республика Хакасия, г. Черногорск, пр. Космонавтов, д. 17а'
+            ].join('')
+        }, {
+            preset: 'islands#redDotIcon'
+        });
+        myMap.geoObjects.add(second_building);
+
+        myMap.behaviors.disable('scrollZoom');
+    });
+</script>
+{% endblock scripts %}}
